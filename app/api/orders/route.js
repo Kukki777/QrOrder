@@ -1,5 +1,7 @@
+
 import { NextResponse } from 'next/server';
-import clientPromise from '../../../lib/mongodb';
+import connectdb from '@/lib/mongodb';
+import Order from '@/models/Order';
 
 export async function POST(request) {
   try {
@@ -20,19 +22,16 @@ export async function POST(request) {
     }
 
     console.log('Connecting to MongoDB...');
-    const client = await clientPromise;
+    await connectdb();
     console.log('MongoDB connected successfully');
     
-    const db = client.db('qr-app');
-    const collection = db.collection('orders');
-
-    const order = {
+    const orderData = {
       product,
       user,
       payment: {
-        cardNumber: payment.cardNumber ? payment.cardNumber.slice(-4) : '****', // Only store last 4 digits
+        cardNumber: payment.cardNumber ? payment.cardNumber.slice(-4) : '****',
         expiryDate: payment.expiryDate || '',
-        cvv: '***' // Don't store actual CVV
+        cvv: '***'
       },
       total: parseFloat(total),
       orderDate: orderDate || new Date(),
@@ -40,17 +39,17 @@ export async function POST(request) {
       createdAt: new Date()
     };
 
-    console.log('Order object to insert:', order);
+    console.log('Order object to insert:', orderData);
     
-    const result = await collection.insertOne(order);
+    const order = new Order(orderData);
+    const result = await order.save();
     console.log('Order inserted successfully:', result);
 
-    return NextResponse.json({ 
-      success: true, 
-      orderId: result.insertedId,
-      message: 'Order created successfully' 
+    return NextResponse.json({
+      success: true,
+      orderId: result._id,
+      message: 'Order created successfully'
     });
-
   } catch (error) {
     console.error('Error creating order:', error);
     return NextResponse.json(
@@ -64,18 +63,15 @@ export async function GET() {
   try {
     console.log('API route called - GET /api/orders');
     
-    const client = await clientPromise;
-    const db = client.db('qr-app');
-    const collection = db.collection('orders');
-
-    const orders = await collection.find({}).sort({ createdAt: -1 }).toArray();
+    await connectdb();
+    
+    const orders = await Order.find({}).sort({ createdAt: -1 });
     console.log('Orders fetched successfully:', orders.length);
 
-    return NextResponse.json({ 
-      success: true, 
-      orders 
+    return NextResponse.json({
+      success: true,
+      orders
     });
-
   } catch (error) {
     console.error('Error fetching orders:', error);
     return NextResponse.json(

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '../../../../lib/mongodb';
-import { ObjectId } from 'mongodb';
+import connectdb from '@/lib/mongodb';
+import Order from '@/models/Order';
+
 
 export async function PATCH(request, { params }) {
   try {
@@ -8,32 +9,29 @@ export async function PATCH(request, { params }) {
     const body = await request.json();
     const { status } = body;
 
-    const client = await clientPromise;
-    const db = client.db('qr-app');
-    const collection = db.collection('orders');
+    await connectdb();
 
-    const result = await collection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: { status, updatedAt: new Date() } }
+    const result = await Order.findByIdAndUpdate(
+      id,
+      { status, updatedAt: new Date() },
+      { new: true }
     );
 
-    if (result.matchedCount === 0) {
+    if (!result) {
       return NextResponse.json(
         { success: false, error: 'Order not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Order status updated successfully' 
+    return NextResponse.json({
+      success: true,
+      message: 'Order status updated successfully'
     });
-
   } catch (error) {
     console.error('Error updating order:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to update order' },
       { status: 500 }
     );
-  }
-}
+  }}
