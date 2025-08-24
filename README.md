@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# QR Product App
 
-## Getting Started
+A Next.js application with product popup, user info form, payment processing, and MongoDB integration.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Product Selection**: Popup showing product details and quantity selection
+- **User Information**: Form to collect customer details
+- **Payment Processing**: Credit card information collection
+- **Database Storage**: MongoDB integration to store orders
+- **Admin Dashboard**: View and manage all orders
+
+## Setup
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **MongoDB Setup**
+   - Install MongoDB locally or use MongoDB Atlas
+   - Create a database named `qr-app`
+   - Set environment variable in `.env.local`:
+     ```
+     MONGODB_URI=mongodb://localhost:27017/qr-app
+     ```
+
+3. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Access Application**
+   - Main app: http://localhost:3000
+   - Admin dashboard: http://localhost:3000/admin
+
+## Database Schema
+
+The application uses MongoDB with the following schema:
+
+```javascript
+Order {
+  product: {
+    name: String,
+    price: Number,
+    quantity: Number
+  },
+  user: {
+    name: String,
+    email: String,
+    phone: String,
+    address: String
+  },
+  payment: {
+    cardNumber: String, // Last 4 digits only
+    expiryDate: String,
+    cvv: String // Always "***"
+  },
+  total: Number,
+  orderDate: Date,
+  status: String, // pending, processing, completed, cancelled
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## API Routes
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- `POST /api/orders` - Create new order
+- `GET /api/orders` - Get all orders
+- `PATCH /api/orders/[id]` - Update order status
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Security Features
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Credit card CVV is never stored
+- Only last 4 digits of card number are stored
+- Input validation on all forms
+- Secure MongoDB connection
