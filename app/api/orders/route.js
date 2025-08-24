@@ -65,7 +65,7 @@ export async function GET() {
     
     await connectdb();
     
-    const orders = await Order.find({}).sort({ createdAt: -1 });
+    const orders = await Order.find({});
     console.log('Orders fetched successfully:', orders.length);
 
     return NextResponse.json({

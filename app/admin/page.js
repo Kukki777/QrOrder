@@ -75,11 +75,17 @@ export default function AdminPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                     ID
+                  </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Order ID
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Customer Details
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Location
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Product Info
@@ -99,11 +105,16 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {orders.map((order) => (
+                {orders.map((order, index) => (
                   <tr key={order._id} className="hover:bg-blue-50 transition-colors">
+                     <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-mono font-semibold text-gray-900 bg-gray-100 px-2 py-1 rounded">
+                        {index + 1}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-mono font-semibold text-gray-900 bg-gray-100 px-2 py-1 rounded">
-                        #{order._id.toString().slice(-8)}
+                        #{order._id}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -111,6 +122,12 @@ export default function AdminPage() {
                         <div className="font-semibold text-gray-900">{order.user.name}</div>
                         <div className="text-gray-600">{order.user.email}</div>
                         <div className="text-gray-500 text-xs">{order.user.phone}</div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm">
+                        <div className="font-semibold text-gray-900">{order.user.address}</div>
+                       
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
