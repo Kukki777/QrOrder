@@ -5,7 +5,7 @@ export default function Home() {
   const [step, setStep] = useState(1);
   const [productData, setProductData] = useState({
     name: "Premium Product",
-    price: 99.99,
+    price: 100,
     quantity: 1
   });
   const [userInfo, setUserInfo] = useState({
@@ -101,7 +101,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-6 text-gray-900">Product Selection</h2>
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-xl mb-6 text-white">
               <h3 className="text-xl font-semibold mb-2">{productData.name}</h3>
-              <p className="text-4xl font-bold">${productData.price}</p>
+              <p className="text-4xl font-bold">Rs{productData.price}</p>
               <p className="text-blue-100 text-sm mt-1">Premium Quality</p>
             </div>
             <div className="mb-6">
@@ -120,7 +120,7 @@ export default function Home() {
             </div>
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
               <p className="text-sm text-gray-600 mb-1">Total Amount</p>
-              <p className="text-2xl font-bold text-gray-900">${(productData.price * productData.quantity).toFixed(2)}</p>
+              <p className="text-2xl font-bold text-gray-900">Rs{(productData.price * productData.quantity).toFixed(2)}</p>
             </div>
             <button 
               onClick={() => setStep(2)}
@@ -249,12 +249,12 @@ export default function Home() {
               <p className="text-sm text-gray-600 mb-2">Order Summary:</p>
               <div className="flex justify-between items-center mb-2">
                 <span className="font-medium text-gray-900">{productData.name} x {productData.quantity}</span>
-                <span className="text-gray-600">${(productData.price * productData.quantity).toFixed(2)}</span>
+                <span className="text-gray-600">Rs{(productData.price * productData.quantity).toFixed(2)}</span>
               </div>
               <div className="border-t border-green-200 pt-2">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-gray-900">Total Amount</span>
-                  <span className="text-2xl font-bold text-green-600">${(productData.price * productData.quantity).toFixed(2)}</span>
+                  <span className="text-2xl font-bold text-green-600">Rs{(productData.price * productData.quantity).toFixed(2)}</span>
                 </div>
               </div>
             </div>

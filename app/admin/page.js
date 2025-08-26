@@ -134,16 +134,16 @@ export default function AdminPage() {
                       <div className="text-sm">
                         <div className="font-semibold text-gray-900">{order.product.name}</div>
                         <div className="text-gray-600">Quantity: {order.product.quantity}</div>
-                        <div className="text-gray-500 text-xs">${order.product.price} each</div>
+                        <div className="text-gray-500 text-xs">Rs{order.product.price} each</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-lg font-bold text-green-600">
-                        ${order.total.toFixed(2)}
+                        Rs{order.total.toFixed(2)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
+                      <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full Rs{
                         order.status === 'completed' ? 'bg-green-100 text-green-800' :
                         order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
                         order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
